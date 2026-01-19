@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chat with your AI agent">
+    <title>Chat - ChatBot Platform</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Our styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- =======================================================================
+       CHAT PAGE
+       =======================================================================
+       Full-screen chat interface for interacting with the AI agent.
+       ======================================================================= -->
+
+    <div class="chat-layout">
+        <!-- Chat Header -->
+        <header class="chat-header">
+            <a href="dashboard.html" class="chat-back">← Back</a>
+            <h1 class="chat-project-name" id="project-name">Loading...</h1>
+            <div class="flex gap-2">
+                <button type="button" class="btn btn-secondary btn-icon" id="files-btn" title="Files">
+                    📎
+                </button>
+                <button type="button" class="btn btn-secondary btn-icon" id="settings-btn" title="Settings">
+                    ⚙️
+                </button>
+                <button type="button" class="btn btn-secondary btn-icon" id="clear-btn" title="Clear Chat">
+                    🗑️
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Messages Container -->
+        <div class="chat-messages" id="chat-messages">
+            <!-- Welcome message shown when no messages -->
+            <div class="chat-welcome" id="chat-welcome">
+                <div class="chat-welcome-icon">💬</div>
+                <h2 class="chat-welcome-title">Start a conversation</h2>
+                <p>Type a message below to begin chatting with your AI agent.</p>
+            </div>
+
+            <!-- Messages will be loaded dynamically -->
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input-container">
+            <form class="chat-input-form" id="chat-form">
+                <textarea class="chat-input" id="chat-input" placeholder="Type your message..." rows="1"></textarea>
+                <button type="submit" class="btn btn-primary chat-send-btn" id="send-btn">
+                    Send
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- =======================================================================
+       FILES MODAL
+       =======================================================================
+       Modal for uploading and viewing files attached to the project.
+       ======================================================================= -->
+    <div class="modal-overlay" id="files-modal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Project Files</h2>
+                <button type="button" class="modal-close" id="files-modal-close">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Upload Area -->
+                <div class="file-upload-area" id="file-upload-area">
+                    <div class="file-upload-icon">📤</div>
+                    <p><strong>Click to upload</strong> or drag and drop</p>
+                    <p class="text-sm text-muted">PDF, images, text files up to 10MB</p>
+                    <input type="file" id="file-input" style="display: none;">
+                </div>
+
+                <!-- File List -->
+                <div class="file-list" id="file-list">
+                    <!-- Files will be loaded dynamically -->
+                </div>
+
+                <!-- Empty state for files -->
+                <div id="files-empty" class="text-center p-4 text-muted" style="display: none;">
+                    No files uploaded yet
+                </div>
+
+                <!-- Loading state -->
+                <div id="files-loading" class="text-center p-4" style="display: none;">
+                    <div class="spinner" style="margin: 0 auto;"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="files-close">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =======================================================================
+       SETTINGS MODAL
+       =======================================================================
+       Modal for editing project settings (name, prompt, etc.)
+       ======================================================================= -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Project Settings</h2>
+                <button type="button" class="modal-close" id="settings-modal-close">✕</button>
+            </div>
+
+            <form id="settings-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="settings-name" class="form-label">Project Name</label>
+                        <input type="text" id="settings-name" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="settings-description" class="form-label">Description</label>
+                        <textarea id="settings-description" class="form-textarea" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="settings-prompt" class="form-label">System Prompt</label>
+                        <textarea id="settings-prompt" class="form-textarea" rows="4" required></textarea>
+                        <p class="text-sm text-muted mt-2">
+                            Changes to the system prompt will apply to new messages only.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="settings-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="btn-text">Save Changes</span>
+                        <span class="btn-spinner spinner" style="display: none;"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+
+</html>

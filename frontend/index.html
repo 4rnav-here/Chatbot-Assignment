@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ChatBot Platform - Create and manage AI-powered chatbot agents">
+  <title>ChatBot Platform - Login</title>
+  
+  <!-- Google Fonts - Inter (clean, modern font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Our styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- =======================================================================
+       AUTH PAGE
+       =======================================================================
+       This page handles both login and registration using tabs.
+       The JavaScript toggles between forms without a page reload.
+       ======================================================================= -->
+  
+  <div class="auth-page">
+    <div class="auth-card">
+      <!-- Header with branding -->
+      <div class="auth-header">
+        <h1 class="auth-logo">🤖 ChatBot</h1>
+        <p class="auth-subtitle">Build intelligent AI agents in minutes</p>
+      </div>
+      
+      <div class="auth-body">
+        <!-- Tab buttons to switch between login and register -->
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab active" data-tab="login">Sign In</button>
+          <button type="button" class="auth-tab" data-tab="register">Sign Up</button>
+        </div>
+        
+        <!-- Alert container for showing messages -->
+        <div id="auth-alert" class="alert" style="display: none;"></div>
+        
+        <!-- Login Form -->
+        <form id="login-form" class="auth-form active">
+          <div class="form-group">
+            <label for="login-email" class="form-label">Email Address</label>
+            <input 
+              type="email" 
+              id="login-email" 
+              class="form-input" 
+              placeholder="you@example.com"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="login-password" class="form-label">Password</label>
+            <input 
+              type="password" 
+              id="login-password" 
+              class="form-input" 
+              placeholder="Enter your password"
+              required
+            >
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-spinner spinner" style="display: none;"></span>
+          </button>
+        </form>
+        
+        <!-- Register Form -->
+        <form id="register-form" class="auth-form">
+          <div class="form-group">
+            <label for="register-name" class="form-label">Full Name</label>
+            <input 
+              type="text" 
+              id="register-name" 
+              class="form-input" 
+              placeholder="John Doe"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="register-email" class="form-label">Email Address</label>
+            <input 
+              type="email" 
+              id="register-email" 
+              class="form-input" 
+              placeholder="you@example.com"
+              required
+            >
+          </div>
+          
+          <div class="form-group">
+            <label for="register-password" class="form-label">Password</label>
+            <input 
+              type="password" 
+              id="register-password" 
+              class="form-input" 
+              placeholder="At least 6 characters"
+              minlength="6"
+              required
+            >
+          </div>
+          
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-spinner spinner" style="display: none;"></span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

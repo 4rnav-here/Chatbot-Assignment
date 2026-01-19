@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your AI chatbot projects">
+    <title>Dashboard - ChatBot Platform</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Our styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- =======================================================================
+       DASHBOARD PAGE
+       =======================================================================
+       Displays user's projects with options to create, edit, delete, and chat.
+       ======================================================================= -->
+
+    <div class="dashboard-layout">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="container">
+                <a href="dashboard.html" class="dashboard-logo">🤖 ChatBot</a>
+
+                <nav class="dashboard-nav">
+                    <div class="dashboard-user">
+                        <span id="user-name"></span>
+                        <div class="dashboard-avatar" id="user-avatar"></div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="logout-btn">Logout</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <div class="container">
+                <!-- Page Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 class="dashboard-title">Your Projects</h1>
+                        <p class="dashboard-subtitle">Create and manage your AI chatbot agents</p>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="create-project-btn">
+                        ➕ New Project
+                    </button>
+                </div>
+
+                <!-- Alert container -->
+                <div id="dashboard-alert" class="alert mb-4" style="display: none;"></div>
+
+                <!-- Projects Grid -->
+                <div id="projects-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Projects will be loaded here dynamically -->
+                </div>
+
+                <!-- Empty State (shown when no projects) -->
+                <div id="empty-state" class="empty-state" style="display: none;">
+                    <div class="empty-state-icon">📁</div>
+                    <h3 class="empty-state-title">No projects yet</h3>
+                    <p>Create your first AI chatbot project to get started.</p>
+                    <button type="button" class="btn btn-primary mt-4" id="create-first-btn">
+                        Create Your First Project
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="text-center p-6">
+                    <div class="spinner" style="margin: 0 auto;"></div>
+                    <p class="mt-4 text-muted">Loading projects...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- =======================================================================
+       CREATE/EDIT PROJECT MODAL
+       =======================================================================
+       Modal dialog for creating new projects or editing existing ones.
+       ======================================================================= -->
+    <div class="modal-overlay" id="project-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">Create New Project</h2>
+                <button type="button" class="modal-close" id="modal-close">✕</button>
+            </div>
+
+            <form id="project-form">
+                <div class="modal-body">
+                    <input type="hidden" id="project-id">
+
+                    <div class="form-group">
+                        <label for="project-name" class="form-label">Project Name *</label>
+                        <input type="text" id="project-name" class="form-input" placeholder="e.g., Customer Support Bot"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project-description" class="form-label">Description</label>
+                        <textarea id="project-description" class="form-textarea"
+                            placeholder="Brief description of your chatbot's purpose" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project-prompt" class="form-label">System Prompt *</label>
+                        <textarea id="project-prompt" class="form-textarea"
+                            placeholder="Instructions for the AI. Example: You are a helpful customer support agent for a tech company..."
+                            rows="4" required></textarea>
+                        <p class="text-sm text-muted mt-2">
+                            This prompt defines your chatbot's personality and behavior.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="modal-submit">
+                        <span class="btn-text">Create Project</span>
+                        <span class="btn-spinner spinner" style="display: none;"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =======================================================================
+       DELETE CONFIRMATION MODAL
+       ======================================================================= -->
+    <div class="modal-overlay" id="delete-modal">
+        <div class="modal" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Delete Project?</h2>
+                <button type="button" class="modal-close" id="delete-modal-close">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <p>Are you sure you want to delete "<span id="delete-project-name"></span>"?</p>
+                <p class="text-muted text-sm mt-2">This action cannot be undone. All chat history and files will be
+                    permanently deleted.</p>
+                <input type="hidden" id="delete-project-id">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="delete-cancel">Cancel</button>
+                <button type="button" class="btn btn-danger" id="delete-confirm">
+                    <span class="btn-text">Delete</span>
+                    <span class="btn-spinner spinner" style="display: none;"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

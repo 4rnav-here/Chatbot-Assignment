@@ -1,0 +1,124 @@
+// =============================================================================
+// PRISMA SCHEMA - Database Models Definition
+// =============================================================================
+// This file defines the structure of our PostgreSQL database using Prisma ORM.
+// Prisma reads this file to:
+//   1. Generate migrations (SQL commands to create/update tables)
+//   2. Generate the Prisma Client (JavaScript code to interact with the database)
+// 
+// NOTES FOR UNDERSTANDING:
+// - @id: Marks a field as the primary key (unique identifier for each row)
+// - @default(uuid()): Automatically generates a unique ID when a record is created
+// - @unique: Ensures no two rows can have the same value for this field
+// - @relation: Defines how models are connected (foreign keys)
+// - DateTime @default(now()): Automatically sets the current timestamp
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// USER MODEL
+// =============================================================================
+// Represents a registered user in the system.
+// Each user can own multiple projects (one-to-many relationship).
+// 
+// Fields:
+// - id: Unique identifier (UUID format for security - hard to guess)
+// - email: User's email address (must be unique for login)
+// - password: Hashed password (NEVER store plain text passwords!)
+// - name: Display name for the user
+// - projects: Array of all projects owned by this user
+// - createdAt: When the user registered
+// =============================================================================
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  name      String
+  projects  Project[]
+  createdAt DateTime  @default(now())
+}
+
+// =============================================================================
+// PROJECT MODEL
+// =============================================================================
+// Represents a chatbot project/agent owned by a user.
+// Each project has its own system prompt that defines the AI's behavior.
+// 
+// Fields:
+// - id: Unique project identifier
+// - name: Display name (e.g., "Customer Support Bot")
+// - description: Optional longer description
+// - systemPrompt: The "personality" instructions for the AI
+//                 This is sent to Gemini before each conversation
+//                 Example: "You are a helpful cooking assistant..."
+// - userId: Reference to the owning user (foreign key)
+// - user: The User object this project belongs to
+// - messages: All chat messages in this project
+// - files: All uploaded files for this project
+// =============================================================================
+model Project {
+  id           String    @id @default(uuid())
+  name         String
+  description  String?
+  systemPrompt String    @default("You are a helpful assistant.")
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages     Message[]
+  files        File[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// =============================================================================
+// MESSAGE MODEL
+// =============================================================================
+// Stores individual chat messages for conversation history.
+// Having history allows the AI to maintain context across messages.
+// 
+// Fields:
+// - role: Either "user" (human) or "assistant" (AI)
+//         Gemini API uses these exact role names
+// - content: The actual message text
+// - projectId: Which project/conversation this message belongs to
+// =============================================================================
+model Message {
+  id        String   @id @default(uuid())
+  role      String
+  content   String
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+// =============================================================================
+// FILE MODEL
+// =============================================================================
+// Tracks files uploaded to a project.
+// Files are stored on disk, this table just stores metadata.
+// 
+// Fields:
+// - filename: Original name of the uploaded file
+// - storedName: Name used to store the file on disk (unique to prevent conflicts)
+// - path: Full path to the file on the server
+// - mimeType: File type (e.g., "image/png", "application/pdf")
+// - size: File size in bytes
+// =============================================================================
+model File {
+  id         String   @id @default(uuid())
+  filename   String
+  storedName String
+  path       String
+  mimeType   String
+  size       Int
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+}
