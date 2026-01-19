@@ -25,7 +25,7 @@
 // TODO: Replace YOUR_RAILWAY_URL with your actual Railway backend URL after deployment
 const API_BASE_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:5000/api'
-    : 'https://YOUR_RAILWAY_URL.up.railway.app/api';
+    : 'https://chatbot-assignment-production.up.railway.app/api';
 
 // =============================================================================
 // TOKEN MANAGEMENT
