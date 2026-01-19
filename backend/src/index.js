@@ -96,18 +96,18 @@ app.use(errorHandler);
 // START SERVER
 // =============================================================================
 const PORT = process.env.PORT || 5000;
+const HOST = '0.0.0.0';  // Required for Railway/Docker - bind to all interfaces
 
-app.listen(PORT, () => {
-  console.log(`
-╔═══════════════════════════════════════════════════════════╗
-║                  CHATBOT PLATFORM API                     ║
-╠═══════════════════════════════════════════════════════════╣
-║  Server running on: http://localhost:${PORT}                 ║
-║  Environment: ${process.env.NODE_ENV || 'development'}                            ║
-║  API Base URL: http://localhost:${PORT}/api                  ║
-╚═══════════════════════════════════════════════════════════╝
-  `);
+app.listen(PORT, HOST, () => {
+  console.log(`Server started successfully!`);
+  console.log(`Port: ${PORT}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Health check: http://localhost:${PORT}/api/health`);
+}).on('error', (err) => {
+  console.error('Failed to start server:', err);
+  process.exit(1);
 });
 
 // Export for testing purposes
 module.exports = app;
+
