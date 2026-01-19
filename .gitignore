@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Documentation (internal)
+docs/
+
 # Environment variables
 .env
 .env.local
