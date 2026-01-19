@@ -16,18 +16,37 @@
 // Load environment variables FIRST (before any other imports that might use them)
 require('dotenv').config();
 
+console.log('=== SERVER STARTING ===');
+console.log('Node version:', process.version);
+console.log('Environment:', process.env.NODE_ENV || 'development');
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
-// Import route handlers
-const authRoutes = require('./routes/authRoutes');
-const projectRoutes = require('./routes/projectRoutes');
-const chatRoutes = require('./routes/chatRoutes');
-const fileRoutes = require('./routes/fileRoutes');
+console.log('Core modules loaded');
 
-// Import error handling middleware
-const { errorHandler, notFoundHandler } = require('./middleware/errorMiddleware');
+// Import route handlers with error catching
+let authRoutes, projectRoutes, chatRoutes, fileRoutes, errorHandler, notFoundHandler;
+try {
+  authRoutes = require('./routes/authRoutes');
+  console.log('authRoutes loaded');
+  projectRoutes = require('./routes/projectRoutes');
+  console.log('projectRoutes loaded');
+  chatRoutes = require('./routes/chatRoutes');
+  console.log('chatRoutes loaded');
+  fileRoutes = require('./routes/fileRoutes');
+  console.log('fileRoutes loaded');
+
+  // Import error handling middleware
+  const errorMiddleware = require('./middleware/errorMiddleware');
+  errorHandler = errorMiddleware.errorHandler;
+  notFoundHandler = errorMiddleware.notFoundHandler;
+  console.log('All routes and middleware loaded successfully');
+} catch (err) {
+  console.error('FATAL: Failed to load routes:', err);
+  process.exit(1);
+}
 
 // =============================================================================
 // CREATE EXPRESS APPLICATION
