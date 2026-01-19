@@ -15,11 +15,11 @@
 // - Unique filenames (prevent overwrites)
 // =============================================================================
 
-const { PrismaClient } = require('@prisma/client');
+// Import shared Prisma client
+const prisma = require('../lib/prisma');
 const path = require('path');
 const fs = require('fs').promises;
 
-const prisma = new PrismaClient();
 
 // =============================================================================
 // GET PROJECT FILES

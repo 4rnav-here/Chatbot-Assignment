@@ -15,10 +15,8 @@
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { PrismaClient } = require('@prisma/client');
-
-// Initialize Prisma Client - this is our database connection
-const prisma = new PrismaClient();
+// Import shared Prisma client - this is our database connection
+const prisma = require('../lib/prisma');
 
 // =============================================================================
 // HELPER FUNCTION: Generate JWT Token

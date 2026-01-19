@@ -13,8 +13,8 @@
 // We always filter by userId to ensure data isolation.
 // =============================================================================
 
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+// Import shared Prisma client
+const prisma = require('../lib/prisma');
 
 // =============================================================================
 // GET ALL PROJECTS

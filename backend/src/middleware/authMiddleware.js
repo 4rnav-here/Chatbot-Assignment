@@ -17,9 +17,8 @@
 // =============================================================================
 
 const jwt = require('jsonwebtoken');
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+// Import shared Prisma client
+const prisma = require('../lib/prisma');
 
 const authMiddleware = async (req, res, next) => {
     try {

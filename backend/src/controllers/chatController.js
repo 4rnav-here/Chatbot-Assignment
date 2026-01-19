@@ -16,10 +16,9 @@
 // This approach maintains context across the conversation.
 // =============================================================================
 
-const { PrismaClient } = require('@prisma/client');
+// Import shared Prisma client
+const prisma = require('../lib/prisma');
 const geminiService = require('../services/geminiService');
-
-const prisma = new PrismaClient();
 
 // =============================================================================
 // GET MESSAGE HISTORY
