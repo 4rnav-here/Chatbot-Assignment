@@ -11,4 +11,4 @@ cmds = ["npm ci || npm install"]
 cmds = ["npx prisma generate"]
 
 [start]
-cmd = "npx prisma migrate deploy && node src/index.js"
+cmd = "node src/index.js"
