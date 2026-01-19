@@ -5,6 +5,7 @@ node_modules/
 .env
 .env.local
 .env.*.local
+.env.example
 
 # Build outputs
 dist/
@@ -31,3 +32,5 @@ backend/uploads/*
 # Prisma
 backend/prisma/*.db
 backend/prisma/*.db-journal
+
+docs/
