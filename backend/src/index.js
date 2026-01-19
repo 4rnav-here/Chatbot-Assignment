@@ -96,6 +96,11 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/files', fileRoutes);
 
 // Health check endpoint - useful for deployment monitoring
+// Railway checks the root path by default
+app.get('/', (req, res) => {
+  res.json({ status: 'ok', message: 'ChatBot Platform API', timestamp: new Date().toISOString() });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
