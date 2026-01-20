@@ -23,7 +23,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 // Create a client instance with our API key.
 // The API key is loaded from environment variables for security.
 // =============================================================================
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY, { apiVersion: 'v1' });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // =============================================================================
 // GET GENERATIVE MODEL
@@ -36,7 +36,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY, { apiVersion: '
 // We use gemini-1.5-flash for chat because it's fast and cost-effective.
 // =============================================================================
 const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash-001',
+    model: 'gemini-1.5-flash-latest',
     // Safety settings (optional - can adjust based on use case)
     safetySettings: [
         {
