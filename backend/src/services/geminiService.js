@@ -36,7 +36,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // We use gemini-1.5-flash for chat because it's fast and cost-effective.
 // =============================================================================
 const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash',
+    model: 'gemini-1.5-flash-latest',
     // Safety settings (optional - can adjust based on use case)
     safetySettings: [
         {
@@ -121,7 +121,9 @@ const generateResponse = async (systemPrompt, conversationHistory) => {
         return text;
 
     } catch (error) {
-        console.error('Gemini API Error:', error.message);
+        // Log the full error for debugging in the console
+        console.error('Full Gemini API Error:', error);
+        console.error('Gemini API Error Message:', error.message);
 
         // Provide helpful error messages
         if (error.message.includes('API_KEY')) {
