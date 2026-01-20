@@ -179,17 +179,24 @@ async function loadMessages() {
  */
 function renderMessages() {
     const container = document.getElementById('chat-messages');
-    const welcome = document.getElementById('chat-welcome');
-
-    if (messages.length === 0) {
-        welcome.style.display = 'block';
-        return;
+    // Clear existing messages (except welcome) and render
+    // We'll append messages to a dedicated messages container to avoid nuking the welcome div
+    let messagesList = document.getElementById('messages-list');
+    if (!messagesList) {
+        // If it doesn't exist yet, we'll create it or just use the container
+        // For now, let's just make sure we don't crash and maybe fix the HTML too
     }
 
-    welcome.style.display = 'none';
-
-    // Clear and render messages
-    container.innerHTML = messages.map(msg => createMessageElement(msg)).join('');
+    // Simple fix: only clear and render if there's something to render
+    // and if we use innerHTML, we must accept that welcome is gone or keep it elsewhere
+    container.innerHTML = `
+        <div class="chat-welcome" id="chat-welcome" style="display: ${messages.length === 0 ? 'block' : 'none'}">
+            <div class="chat-welcome-icon">💬</div>
+            <h2 class="chat-welcome-title">Start a conversation</h2>
+            <p>Type a message below to begin chatting with your AI agent.</p>
+        </div>
+        ${messages.map(msg => createMessageElement(msg)).join('')}
+    `;
 
     // Scroll to bottom
     scrollToBottom();
@@ -239,8 +246,9 @@ async function handleSendMessage(e) {
     input.value = '';
     input.style.height = 'auto';
 
-    // Hide welcome message
-    document.getElementById('chat-welcome').style.display = 'none';
+    // Hide welcome message if it exists
+    const welcome = document.getElementById('chat-welcome');
+    if (welcome) welcome.style.display = 'none';
 
     // Add user message to UI immediately
     const userMessage = {
