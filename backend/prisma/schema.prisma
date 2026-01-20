@@ -76,6 +76,8 @@ model Project {
   files        File[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+
+  @@index([userId])
 }
 
 // =============================================================================
@@ -97,6 +99,8 @@ model Message {
   projectId String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
+
+  @@index([projectId])
 }
 
 // =============================================================================
@@ -122,4 +126,6 @@ model File {
   projectId  String
   project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
+
+  @@index([projectId])
 }

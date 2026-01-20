@@ -22,6 +22,7 @@ console.log('Environment:', process.env.NODE_ENV || 'development');
 
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const path = require('path');
 
 console.log('Core modules loaded');
@@ -52,6 +53,9 @@ try {
 // CREATE EXPRESS APPLICATION
 // =============================================================================
 const app = express();
+
+// Enable GZIP compression
+app.use(compression());
 
 // =============================================================================
 // MIDDLEWARE SETUP
