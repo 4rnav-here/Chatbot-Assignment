@@ -36,7 +36,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // We use gemini-1.5-flash for chat because it's fast and cost-effective.
 // =============================================================================
 const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-flash-latest',
+    model: 'gemini-3-flash-preview',
     // Safety settings (optional - can adjust based on use case)
     safetySettings: [
         {
