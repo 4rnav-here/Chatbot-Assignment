@@ -1,170 +1,86 @@
-# ChatBot Platform
+# 🤖 AI ChatBot Platform
 
-A minimal chatbot platform with JWT authentication, project management, and Gemini AI integration.
+A premium, full-stack AI chatbot platform that allows users to create intelligent agents, manage knowledge bases through file uploads, and engage in meaningful conversations powered by the Gemini 1.5 Flash API.
 
-## 🚀 Quick Start
+## ✨ Features
 
-### Prerequisites
+- **Custom AI Agents:** Create projects with unique system prompts to define personality and expertise.
+- **Knowledge Base:** Upload PDF and Text files to provide context to your AI agents.
+- **Stateless Auth:** Secure authentication using JWT and Bcrypt hashing.
+- **Premium UI:** Modern, responsive interface with a focus on aesthetics and micro-interactions.
+- **Performance Optimized:** Includes GZIP compression and database indexing for a snappy experience.
 
-- **Node.js** (v18 or higher)
-- **PostgreSQL** (installed and running)
-- **Gemini API Key** ([Get one here](https://aistudio.google.com/app/apikey))
+## 🛠 Tech Stack & Tools
 
-### 1. Database Setup (PostgreSQL)
+### Frontend (The User Interface)
+- **Vanilla JavaScript:** Powers the dynamic UI updates, message rendering, and API interactions without the overhead of a framework.
+- **CSS3 (Modern UI):** Utilizes custom properties (variables) for a consistent design system, including glassmorphism effects and micro-animations.
+- **Fetch API:** Used within a centralized `js/api.js` client to handle all backend communication and JWT injection.
 
-If you haven't set up PostgreSQL yet:
-
-```bash
-# Open psql (PostgreSQL command line)
-psql -U postgres
-
-# Create a new database
-CREATE DATABASE chatbot_db;
-
-# Exit psql
-\q
-```
-
-### 2. Backend Setup
-
-```bash
-# Navigate to backend folder
-cd backend
-
-# Install dependencies
-npm install
-
-# Copy environment file and edit it
-copy .env.example .env
-```
-
-Edit the `.env` file with your settings:
-
-```env
-PORT=5000
-DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/chatbot_db"
-JWT_SECRET="your-secret-key-change-this"
-GEMINI_API_KEY="your-gemini-api-key"
-```
-
-Run database migrations:
-
-```bash
-# Generate Prisma client and create tables
-npx prisma migrate dev --name init
-
-# Start the server
-npm run dev
-```
-
-The API will be running at `http://localhost:5000`
-
-### 3. Frontend Setup
-
-```bash
-# Navigate to frontend folder
-cd frontend
-
-# Serve the static files (using any static server)
-npx serve .
-```
-
-The frontend will be running at `http://localhost:3000`
+### Backend (The Logical Engine)
+- **Express.js:** The web framework used to build the RESTful API endpoints.
+- **Prisma ORM:** Provides a high-level abstraction over the database, allowing for type-safe queries and easy schema management.
+- **Google Gemini 1.5 Flash:** The brain of the chatbot, utilized for its high speed and impressive context window.
+- **Multer:** Specifically chosen for its efficiency in handling multi-part form data during file uploads.
+- **compression:** A performance middleware that GZIPs all response data, ensuring the app remains snappy even on mobile networks.
+- **jsonwebtoken & bcryptjs:** Combined to create a secure, industry-standard authentication flow.
 
 ## 📁 Project Structure
 
-```
-ChatBot Assignment/
+```text
 ├── backend/
+│   ├── prisma/             # Database schema and migrations
 │   ├── src/
-│   │   ├── controllers/      # HTTP request handlers
-│   │   ├── routes/           # API route definitions
-│   │   ├── middleware/       # Auth, error handling, file uploads
-│   │   ├── services/         # Gemini AI integration
-│   │   └── index.js          # Express server entry point
-│   ├── prisma/
-│   │   └── schema.prisma     # Database schema
-│   ├── uploads/              # Uploaded files storage
-│   └── package.json
+│   │   ├── controllers/    # Route logic (Auth, Chat, Project, File)
+│   │   ├── middleware/     # Auth and Error handlers
+│   │   ├── routes/         # Express API endpoints
+│   │   ├── services/       # AI (Gemini) integration
+│   │   └── lib/            # Shared utilities (Prisma client)
+│   └── uploads/            # Local storage for user files
 ├── frontend/
-│   ├── index.html            # Login/Register page
-│   ├── dashboard.html        # Project management
-│   ├── chat.html             # Chat interface
-│   ├── css/styles.css        # All styles
-│   └── js/                   # JavaScript files
-├── docs/
-│   ├── NOTES.md              # Detailed code explanations
-│   └── ARCHITECTURE.md       # System design
-└── README.md
+│   ├── css/                # Main application styling
+│   ├── js/                 # API client and page logic
+│   └── *.html              # Application pages
+└── architecture/
+    └── README.md           # Detailed system architecture
 ```
 
-## 🔑 API Endpoints
+## 🚀 Getting Started
 
-### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Create account |
-| POST | `/api/auth/login` | Login |
-| GET | `/api/auth/me` | Get current user |
+### Prerequisites
+- Node.js (v18 or higher)
+- PostgreSQL database (e.g., Supabase)
+- Google Gemini API Key
 
-### Projects
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/projects` | List projects |
-| POST | `/api/projects` | Create project |
-| GET | `/api/projects/:id` | Get project |
-| PUT | `/api/projects/:id` | Update project |
-| DELETE | `/api/projects/:id` | Delete project |
+### Installation
 
-### Chat
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/chat/:projectId/messages` | Get messages |
-| POST | `/api/chat/:projectId` | Send message |
-| DELETE | `/api/chat/:projectId/messages` | Clear chat |
+1. **Clone the repository**
+   ```bash
+   git clone [your-repo-url]
+   cd ChatBot-Assignment
+   ```
 
-### Files
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/files/:projectId` | List files |
-| POST | `/api/files/:projectId` | Upload file |
-| DELETE | `/api/files/:projectId/:fileId` | Delete file |
+2. **Backend Setup**
+   ```bash
+   cd backend
+   npm install
+   # Create a .env file based on the environment variables section below
+   npx prisma generate
+   npx prisma migrate deploy
+   npm start
+   ```
 
-## 🎨 Features
+3. **Frontend Setup**
+   The frontend is static. You can serve it using any local server (e.g., Live Server in VS Code) or simply open `index.html`. For production, update the `API_BASE_URL` in `frontend/js/api.js`.
 
-- **User Authentication**: Secure JWT-based auth with bcrypt password hashing
-- **Project Management**: Create, edit, delete AI chatbot projects
-- **Custom System Prompts**: Define unique personalities for each chatbot
-- **Chat Interface**: Real-time conversation with AI using Gemini
-- **File Uploads**: Attach files to projects
-- **Message History**: Persistent chat history per project
-- **Responsive Design**: Clean, minimal UI that works on all devices
-
-## 🔒 Environment Variables
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `PORT` | Server port | `5000` |
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@localhost:5432/db` |
-| `JWT_SECRET` | Secret for signing tokens | `your-secret-key` |
-| `JWT_EXPIRES_IN` | Token expiration | `7d` |
-| `GEMINI_API_KEY` | Google Gemini API key | `AIza...` |
-| `MAX_FILE_SIZE` | Max upload size (bytes) | `10485760` |
-
-## 📝 Development
-
-```bash
-# Start backend in development mode (with hot reload)
-cd backend && npm run dev
-
-# View database in Prisma Studio
-cd backend && npm run db:studio
-
-# Run database migrations
-cd backend && npm run db:migrate
+### Environment Variables (.env)
+```env
+DATABASE_URL="your-postgresql-url"
+DIRECT_URL="your-postgresql-direct-url"
+JWT_SECRET="your-secure-secret"
+GEMINI_API_KEY="your-google-api-key"
+PORT=5000
 ```
 
-## 📖 Learn More
-
-- [NOTES.md](docs/NOTES.md) - Detailed code explanations
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md) - System design documentation
+## 📖 Documentation
+For a deep dive into how the system works, check out the [Architecture Documentation](architecture/README.md).

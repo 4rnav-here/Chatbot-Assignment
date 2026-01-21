@@ -179,24 +179,21 @@ async function loadMessages() {
  */
 function renderMessages() {
     const container = document.getElementById('chat-messages');
-    // Clear existing messages (except welcome) and render
-    // We'll append messages to a dedicated messages container to avoid nuking the welcome div
-    let messagesList = document.getElementById('messages-list');
-    if (!messagesList) {
-        // If it doesn't exist yet, we'll create it or just use the container
-        // For now, let's just make sure we don't crash and maybe fix the HTML too
-    }
+    if (!container) return;
 
-    // Simple fix: only clear and render if there's something to render
-    // and if we use innerHTML, we must accept that welcome is gone or keep it elsewhere
-    container.innerHTML = `
+    // Build the HTML content
+    const welcomeHtml = `
         <div class="chat-welcome" id="chat-welcome" style="display: ${messages.length === 0 ? 'block' : 'none'}">
             <div class="chat-welcome-icon">💬</div>
             <h2 class="chat-welcome-title">Start a conversation</h2>
             <p>Type a message below to begin chatting with your AI agent.</p>
         </div>
-        ${messages.map(msg => createMessageElement(msg)).join('')}
     `;
+
+    const messagesHtml = messages.map(msg => createMessageElement(msg)).join('');
+
+    // Update the container
+    container.innerHTML = welcomeHtml + messagesHtml;
 
     // Scroll to bottom
     scrollToBottom();
