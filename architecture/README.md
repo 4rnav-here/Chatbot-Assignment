@@ -57,6 +57,50 @@ graph TD
     E --> J[File Storage]
 ```
 
+## Project Flows
+
+### 1. Authentication Flow
+This flow ensures secure access to personal projects and chat history.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant DB
+    User->>Frontend: Enter credentials
+    Frontend->>Backend: POST /api/auth/login
+    Backend->>DB: Find user & verify hash
+    DB-->>Backend: User found
+    Backend->>Backend: Generate JWT
+    Backend-->>Frontend: 200 OK (Token + User Data)
+    Frontend->>Frontend: Save Token to localStorage
+    Frontend->>User: Redirect to Dashboard
+```
+
+### 2. AI Chat & Context Flow
+This is the core loop where user input is combined with historical context and sent to Gemini.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant Gemini
+    participant DB
+    User->>Frontend: Type "Hello"
+    Frontend->>Frontend: Render Optimistic UI
+    Frontend->>Backend: POST /api/chat/:projectId
+    Backend->>DB: Store User Message
+    Backend->>DB: Fetch last 20 messages (Context)
+    DB-->>Backend: Recent History
+    Backend->>Gemini: History + System Prompt
+    Gemini-->>Backend: AI Response
+    Backend->>DB: Store AI Response
+    Backend-->>Frontend: AI Message Data
+    Frontend->>User: Render AI Response
+```
+
 ## Key Infrastructure Features
 
 - **Database Indexing:** Foreign keys (`userId`, `projectId`) are indexed in the Postgres database for sub-millisecond query performance.
