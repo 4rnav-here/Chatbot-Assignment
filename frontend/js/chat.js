@@ -20,6 +20,62 @@ let messages = [];         // Array of chat messages
 let isLoading = false;     // Whether we're waiting for AI response
 
 // =============================================================================
+// MARKDOWN TO HTML CONVERTER
+// =============================================================================
+// Converts markdown formatted text to HTML for proper rendering
+// Supports: bold, italic, headers, code blocks, lists, etc.
+
+function markdownToHtml(markdown) {
+    let html = markdown;
+
+    // Escape special HTML characters first (for user content safety)
+    html = escapeHtml(html);
+
+    // Convert markdown to HTML (in order of specificity)
+    
+    // Code blocks (triple backticks)
+    html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+    
+    // Inline code (single backticks)
+    html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+    
+    // Headers (### Header)
+    html = html.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+    html = html.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+    html = html.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+    
+    // Bold (**text** or __text__)
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
+    
+    // Italic (*text* or _text_)
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/_(.*?)_/g, '<em>$1</em>');
+    
+    // Unordered lists (- or * or +)
+    html = html.replace(/^\s*[-*+] (.*?)$/gm, '<li>$1</li>');
+    html = html.replace(/(<li>.*?<\/li>)/s, '<ul>$1</ul>');
+    
+    // Ordered lists (1. 2. 3.)
+    html = html.replace(/^\s*\d+\. (.*?)$/gm, '<li>$1</li>');
+    
+    // Links [text](url)
+    html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    
+    // Line breaks (--- or ***)
+    html = html.replace(/^(\s*[-*_]){3,}$/gm, '<hr>');
+    
+    // Paragraphs and line breaks
+    html = html.replace(/\n\n/g, '</p><p>');
+    html = '<p>' + html + '</p>';
+    html = html.replace(/<p><\/p>/g, '');
+    html = html.replace(/<p>\s*<(h[1-3]|pre|ul)/g, '<$1');
+    html = html.replace(/<\/(h[1-3]|pre|ul)>\s*<\/p>/g, '</$1>');
+
+    return html;
+}
+
+// =============================================================================
 // INITIALIZATION
 // =============================================================================
 
@@ -205,10 +261,16 @@ function renderMessages() {
 function createMessageElement(message) {
     const isUser = message.role === 'user';
     const className = isUser ? 'chat-message-user' : 'chat-message-assistant';
+    
+    // For user messages, escape HTML for safety
+    // For assistant messages, convert markdown to HTML for proper formatting
+    const messageContent = isUser 
+        ? escapeHtml(message.content)
+        : markdownToHtml(message.content);
 
     return `
     <div class="chat-message ${className}">
-      <div class="message-content">${escapeHtml(message.content)}</div>
+      <div class="message-content">${messageContent}</div>
       <div class="chat-message-time">${formatTime(message.createdAt)}</div>
     </div>
   `;
