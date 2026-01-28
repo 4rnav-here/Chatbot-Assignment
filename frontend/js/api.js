@@ -157,11 +157,18 @@ async function apiRequest(endpoint, options = {}) {
         headers
     });
 
-    // Parse the JSON response
-    const data = await response.json();
-
-    // Check for errors
+    // Check response status first before parsing
     if (!response.ok) {
+        // Try to parse error message from response
+        let errorMessage = 'An error occurred';
+        try {
+            const data = await response.json();
+            errorMessage = data.message || errorMessage;
+        } catch (e) {
+            // If response body is not JSON, use generic error
+            errorMessage = `Server error: ${response.status} ${response.statusText}`;
+        }
+
         // If unauthorized, redirect to login
         if (response.status === 401) {
             removeToken();
@@ -173,9 +180,11 @@ async function apiRequest(endpoint, options = {}) {
             }
         }
 
-        throw new Error(data.message || 'An error occurred');
+        throw new Error(errorMessage);
     }
 
+    // Parse the JSON response
+    const data = await response.json();
     return data;
 }
 
